@@ -1,6 +1,56 @@
 from db import connect_database
 from prettytable import PrettyTable
 
+def map_keyword_id_name(p):
+    conn = connect_database()
+    cursor = conn.cursor()
+    choice = 0
+
+    # Determine if p is id or name
+    try:
+        int(p)
+        sql = 'SELECT * FROM keyword WHERE id = %s'
+        choice = 1
+    except ValueError as e:
+        sql = 'SELECT * FROM keyword WHERE keyword_name = %s'
+        choice = 2
+    
+    cursor.execute(sql,p)
+    data = cursor.fetchall() 
+    row = data[0]
+
+    if choice == 1:
+        return row['keyword_name']
+    elif choice == 2:
+        return row['id']
+    else:
+        return
+
+def map_site_id_name(p):
+    conn = connect_database()
+    cursor = conn.cursor()
+    choice = 0
+
+    # Determine if p is id or name
+    try:
+        int(p)
+        sql = 'SELECT * FROM site WHERE id = %s'
+        choice = 1
+    except ValueError as e:
+        sql = 'SELECT * FROM site WHERE site_name = %s'
+        choice = 2
+    
+    cursor.execute(sql,p)
+    data = cursor.fetchall() # [{'id': 1, 'site_name': 'Telegram', 'url': 'web.telegram.org', 'quick_search': 'none'}]
+    row = data[0]
+
+    if choice == 1:
+        return row['site_name']
+    elif choice == 2:
+        return row['id']
+    else:
+        return
+
 def add_keyword():
     conn = connect_database()
     cursor = conn.cursor()
@@ -59,6 +109,59 @@ VALUE
     print('已成功添加！\n')
     cursor.close()
     conn.close()
+
+def update_keyword():
+    with connect_database() as conn:
+        cursor = conn.cursor()
+        sql = '''
+SELECT k.id, k.keyword_name, s.site_name, k.rating
+FROM keyword k
+JOIN site s ON k.site_id = s.id
+'''
+        cursor.execute(sql)
+
+        # Make the output look better
+        # data: [{'keyword_name': 'Yummy', 'site_name': 'Telegram', 'rating': 5, 'create_at': datetime.datetime(2025, 12, 3, 10, 57, 16)}]
+        data = cursor.fetchall()
+        table = PrettyTable()
+        table.field_names = ['id', 'keyword', '网站', '喜爱程度']
+        for row in data:
+            table.add_row(row.values())
+        print(table)
+
+    choice_keyword = input('请输入你想修改的 keyword：').strip()
+    try:
+        int(choice_keyword)
+    except ValueError as e:
+        map_keyword_id_name(choice_keyword)
+
+    print('------请输入修改后的数据------')
+    name = input('keyword: ')
+
+    # Determine which site you want to change to.
+    query_site()
+    site = input('网站：')
+    try:
+        int(site)
+    except ValueError as e:
+        site = map_site_id_name(site)
+    
+    rating = input('喜爱程度：')
+    remark = input('备注：')
+
+    sql = '''
+UPDATE keyword
+SET keyword_name = %s, site_id = %s, rating = %s, remark = %s
+WHERE id = %s
+'''
+    conn = connect_database()
+    cursor = conn.cursor()
+    cursor.execute(sql, (name, site, rating, remark, choice_keyword))
+    conn.commit()
+    print('已成功修改√\n')
+    cursor.close()
+    conn.close()
+
 
 def query_keyword():
     conn = connect_database()
@@ -152,7 +255,8 @@ def fuzzy_search():
     pass
 
 def main():
-    query_by_site()
+    name = map_keyword_id_name('4')
+    print(name)
 
 if __name__ == '__main__':
     main()

@@ -49,7 +49,7 @@ def menu_level_1():
     
 
 def menu_level_2():
-    pass
+    my_keyword.update_keyword()
 
 def menu_level_3():
     menu3_2()
