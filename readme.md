@@ -24,22 +24,22 @@
 | 字段 | 类型 | 说明 | 是否必须
 |------|------|------|------
 | ID | INT | 主键 | 是
-| keyword | VARCHAR(50) | 关键词主体 | 是
-| 备注 | VARCHAR(400) | 备注信息 | 否
-| 网站ID | VARCHAR(50) | 外键关联 | 是
-| 喜爱程度 | TINYINT | 1-5 级别 | 否
-| 图片文件地址 | VARCHAR(255) | 图片路径 | 否
-| 添加日期 | TIMESTAMP | 默认当天 | 否
-| 更新日期 | TIMESTAMP | 默认修改日期 | 否
+| keyword_name | VARCHAR(50) | 关键词主体 | 是
+| remark | VARCHAR(400) | 备注信息 | 否
+| site_id | VARCHAR(50) | 外键关联 | 是
+| rating | TINYINT | 1-5 级别 | 否
+| image_path | VARCHAR(255) | 图片路径 | 否
+| create_at | TIMESTAMP | 默认当天 | 否
+| update_at | TIMESTAMP | 默认修改日期 | 否
 
 ### 网站表
 
 | 字段 | 类型 | 说明 | 是否必须
 |------|------|------|------
 | ID | INT | 主键 | 是
-| 网站名称 | VARCHAR(50) | 网站名称 | 是
-| 网站链接 | VARCHAR(100) | 网站 URL | 是
-| 是否快速搜索 | ENUM | 是/否/无 | 否
+| site_name | VARCHAR(50) | 网站名称 | 是
+| url | VARCHAR(100) | 网站 URL | 是
+| quick_search | ENUM | 是/否/无 | 否
 
 ### 图片文件夹
 

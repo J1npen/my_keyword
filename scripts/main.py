@@ -1,4 +1,4 @@
-import my_keyword
+import src.my_keyword.keyword_logic as keyword_logic
 
 def menu3_2():
     print('''
@@ -35,7 +35,7 @@ def menu_level_1():
     menu1_2()
 
     menu_actions = {
-        '1': my_keyword.add_keyword,
+        '1': keyword_logic.add_keyword,
         '2': lambda: print('功能暂未开发！请耐心等待...')
     }
 
@@ -49,17 +49,17 @@ def menu_level_1():
     
 
 def menu_level_2():
-    my_keyword.update_keyword()
+    keyword_logic.update_keyword()
 
 def menu_level_3():
     menu3_2()
     choice = input('选择你需要的功能选项：').strip()
 
     actions = {
-        '1': my_keyword.query_keyword,
-        '2': my_keyword.query_site,
-        '3': my_keyword.query_by_site,
-        '4': my_keyword.query_by_rating,
+        '1': keyword_logic.query_keyword,
+        '2': keyword_logic.query_site,
+        '3': keyword_logic.query_by_site,
+        '4': keyword_logic.query_by_rating,
         '5': lambda: print("功能 5 执行"),
         '6': lambda: print("功能 6 执行"),
     }
@@ -93,7 +93,7 @@ def main():
         loop += 1
 
         if not loop == 1:
-            if choice: print('回车以查看主菜单') # If the menu has already appeared, there's no need to print the output.
+            if choice: print('\n回车以查看主菜单') # If the menu has already appeared, there's no need to print the output.
             choice = input().strip()
 
         if not choice:

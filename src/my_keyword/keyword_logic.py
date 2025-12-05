@@ -1,4 +1,4 @@
-from db import connect_database
+from .db import connect_database
 from prettytable import PrettyTable
 
 def map_keyword_id_name(p):
@@ -17,7 +17,12 @@ def map_keyword_id_name(p):
     
     cursor.execute(sql,p)
     data = cursor.fetchall() 
-    row = data[0]
+    
+    # if p out of range or equal empty return False
+    try:
+        row = data[0]
+    except IndexError as e:
+        return False
 
     if choice == 1:
         return row['keyword_name']
@@ -42,7 +47,12 @@ def map_site_id_name(p):
     
     cursor.execute(sql,p)
     data = cursor.fetchall() # [{'id': 1, 'site_name': 'Telegram', 'url': 'web.telegram.org', 'quick_search': 'none'}]
-    row = data[0]
+    
+    # if p out of range or equal empty return False
+    try:
+        row = data[0]
+    except IndexError as e:
+        return False
 
     if choice == 1:
         return row['site_name']
@@ -117,6 +127,7 @@ def update_keyword():
 SELECT k.id, k.keyword_name, s.site_name, k.rating
 FROM keyword k
 JOIN site s ON k.site_id = s.id
+ORDER BY k.id
 '''
         cursor.execute(sql)
 
@@ -130,10 +141,14 @@ JOIN site s ON k.site_id = s.id
         print(table)
 
     choice_keyword = input('请输入你想修改的 keyword：').strip()
+    # if input == '' return ValueError
     try:
         int(choice_keyword)
     except ValueError as e:
-        map_keyword_id_name(choice_keyword)
+        
+        if not map_keyword_id_name(choice_keyword):
+            print('\n查询不到要修改的 keyword，修改失败 T T') 
+            return
 
     print('------请输入修改后的数据------')
     name = input('keyword: ')
@@ -144,6 +159,9 @@ JOIN site s ON k.site_id = s.id
     try:
         int(site)
     except ValueError as e:
+        if not map_site_id_name:
+            print('\n查询不到要修改的网站，修改失败 T T') 
+            return
         site = map_site_id_name(site)
     
     rating = input('喜爱程度：')
@@ -255,8 +273,7 @@ def fuzzy_search():
     pass
 
 def main():
-    name = map_keyword_id_name('4')
-    print(name)
+    query_by_rating()
 
 if __name__ == '__main__':
     main()
