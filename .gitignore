@@ -1,6 +1,4 @@
 venv/
-tests/
-test.py
 __pycache__/
 .vscode/
 gen_tree.py

@@ -70,7 +70,7 @@ def add_keyword():
         print('未添加数据！')
         return
 
-    # if not site you want to add?
+    # Which site you want to add?
     query_site()
     gap_time = 0
     while True:
